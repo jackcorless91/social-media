@@ -31,9 +31,42 @@ model User {
   comments Comment[]
   likes    Like[]
 
-  followers Follows[]
-  following Follows[]
+  followers Follows[] @relation("following") // user follows x user
+  following Follows[] @relation("follower") // users this user follows
 
-  notifications        Notifications[]
-  notificationsCreated NotificationsCreated[]
+  notifications        Notifications[]        @relation("userNotifications") //notifs received
+  notificationsCreated NotificationsCreated[] @relation("notificationCreator") // notifs sent by user
+}
+
+model Post {
+  id       String  @id @default(cuid())
+  aithorId String
+  content  String?
+  image    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  author User @relation(fields: [aithorId], references: [id], onDelete: Cascade)
+
+  comments      Comment[]
+  likes         Like[]
+  notifications Notification[]
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  authorId  String
+  postId    String
+  createdAt DateTime @default(now())
+
+  // relations
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([authorId, postId])
+}
+
+model Like {
 }
