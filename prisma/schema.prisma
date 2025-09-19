@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -27,28 +26,28 @@ model User {
   createdAt DateTime @default(now()) // member since x
   updatedAt DateTime @updatedAt
 
+  // Relations:
   posts    Post[]
   comments Comment[]
   likes    Like[]
 
-  followers Follows[] @relation("following") // user follows x user
+  followers Follows[] @relation("following") // users who follow this user
   following Follows[] @relation("follower") // users this user follows
 
-  notifications        Notifications[]        @relation("userNotifications") // notifs received
-  notificationsCreated NotificationsCreated[] @relation("notificationCreator") // notifs sent by user
+  notifications        Notification[] @relation("userNotifications") // notifications received by a user
+  notificationsCreated Notification[] @relation("notificationCreator") // notifications triggered by a user
 }
 
 model Post {
-  id       String  @id @default(cuid())
-  aithorId String
-  content  String?
-  image    String?
-
+  id        String   @id @default(cuid())
+  authorId  String
+  content   String?
+  image     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  author User @relation(fields: [aithorId], references: [id], onDelete: Cascade)
-
+  // Relations
+  author        User           @relation(fields: [authorId], references: [id], onDelete: Cascade)
   comments      Comment[]
   likes         Like[]
   notifications Notification[]
@@ -61,7 +60,7 @@ model Comment {
   postId    String
   createdAt DateTime @default(now())
 
-  // relations
+  // Relations
   author        User           @relation(fields: [authorId], references: [id], onDelete: Cascade)
   post          Post           @relation(fields: [postId], references: [id], onDelete: Cascade)
   notifications Notification[]
@@ -75,7 +74,7 @@ model Like {
   userId    String
   createdAt DateTime @default(now())
 
-  // relations
+  // Relations
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 
@@ -84,11 +83,11 @@ model Like {
 }
 
 model Follows {
-  followerId String
-  folowingId String
-  createdAt  DateTime @default(now())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
 
-  //   relations
+  // Relations
   follower  User @relation("follower", fields: [followerId], references: [id], onDelete: Cascade)
   following User @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
 
@@ -106,11 +105,13 @@ model Notification {
   commentId String?
   createdAt DateTime         @default(now())
 
-  //   relations
+  // Relations
   user    User     @relation("userNotifications", fields: [userId], references: [id], onDelete: Cascade)
   creator User     @relation("notificationCreator", fields: [creatorId], references: [id], onDelete: Cascade)
   post    Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
   comment Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
 }
 
 enum NotificationType {
