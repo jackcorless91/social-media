@@ -1,5 +1,5 @@
 "use server";
-
+//  use webhooks for production
 import {auth, currentUser} from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 
@@ -10,7 +10,7 @@ export async function syncUser() {
 
     if(!userId || !user) return;
 
-    // check if user or nah
+    // checking user
     const existingUser = await prisma.user.findUnique({
       where: {
         clerkId: userId,
