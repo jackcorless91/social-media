@@ -17,9 +17,16 @@ export default function CreatePost() {
   const [showImageUpload, setShowImageUpload] = useState(false);
 
   const handleSubmit = async () => {
-    if (!content.trim() && !imageUrl) return
+    if (!content.trim() && !imageUrl) return;
+
+    setIsPosting(true);
     try {
-      await createPost(content, imageUrl)
+      const result = await createPost(content, imageUrl)
+      if (result.success) { // reset form
+        setContent("");
+        setImageUrl("");
+        setShowImageUpload(false);
+      }
     } catch (error) {
 
     } finally {

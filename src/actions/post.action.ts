@@ -1,6 +1,8 @@
 "use server"
 
 import prisma from "@/lib/prisma";
+import {revalidatePath} from "next/cache";
+import { getDbUserId } from "./user.action"
 
 export async function createPost(content:string, imageUrl:string) {
   try {
@@ -10,10 +12,14 @@ export async function createPost(content:string, imageUrl:string) {
       data: {
         content,
         image,
-        authorId
+        authorId: userId
       }
     });
-  } catch (error) {
 
+    revalidatePath("/"); // purge cache
+    return { success:true, post }
+  } catch (error) {
+      console.error("Failed to create post:", error);
+    return { success: false, error: "Failed to create post:" };
   };
 };
