@@ -1,8 +1,10 @@
 
 export default async function Home() {
   return (
-    <div className="m-4">
-      <h1>Home page content</h1>
+    <div className="gtid grid-cols-1 lg:grid-cols-10 gap-6">
+      <div>
+        <CreatePost />
+      </div>
     </div>
   );
 };
