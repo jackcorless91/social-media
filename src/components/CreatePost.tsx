@@ -5,6 +5,9 @@ import {Card, CardContent} from "@/components/ui/card";
 import { Button } from "./ui/button";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import {Textarea} from "@/components/ui/textarea";
+import {useUser} from "@clerk/nextjs";
+import {createPost} from "@/actions/post.action";
+import {ImageIcon, Loader2Icon, SendIcon} from "lucide-react";
 
 export default function CreatePost() {
   const { user } = useUser();
