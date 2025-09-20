@@ -1,10 +1,16 @@
+import { auth, currentUser } from "@clerk/nextjs/server";
+import CreatePost from "@/components/CreatePost";
 
-export default async function Home() {
+export default async function Home(){
+  const user = await currentUser();
+
   return (
-    <div className="gtid grid-cols-1 lg:grid-cols-10 gap-6">
-      <div>
-        <CreatePost />
+    <div className="grid grid-cols-1 lg:grid-cols-10 gap-6">
+      <div className="lg:col-span-6">
+        { user ? <CreatePost /> : null }
       </div>
+
+      <div className="hidden lg:block lg:col-end-4 sticky top-20">who to follow</div>
     </div>
   );
 };

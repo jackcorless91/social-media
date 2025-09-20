@@ -51,3 +51,14 @@ export async function getUserByClerkId(clerkId:string) {
     },
   });
 }
+
+export async function getUserId() {
+  const { userId: clerkId } = await auth();
+  if (!clerkId) throw new Error("Unauthorised");
+
+  const user = await getUserByClerkId(clerkId);
+
+  if(!user) throw new Error("User not found");
+
+  return user.id
+};
