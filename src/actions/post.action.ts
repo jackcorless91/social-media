@@ -180,7 +180,7 @@ export async function createComment(postId: string, content: string) {
       return [newComment];
     });
 
-    revalidatePath(`/`);
+    revalidatePath("/");
     return { success: true, comment };
   } catch (error) {
     console.error("Failed to create comment", error);
