@@ -13,30 +13,30 @@ import {DeleteAlertDialog} from "@/components/DeleteAlertDialog";
 type Posts = Awaited<ReturnType<typeof getPosts>>
 type Post = Posts[number]
 
-function PostCard({ post, dbUserId } : { post: Post; dbUserId: string | null }) {
+function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
   const { user } = useUser();
   const [newComment, setNewComment] = useState("");
   const [isCommenting, setIsCommenting] = useState(false);
   const [isLiking, setIsLiking] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [hasLiked, setHasLiked] = useState(post.likes.some(like => like.userId === dbUserId));
-  const [optimisticLikes, setOptimisticLikes] = useState(post._count.likes); //no loading state - update likes now
+  const [hasLiked, setHasLiked] = useState(post.likes.some((like) => like.userId === dbUserId));
+  const [optimisticLikes, setOptmisticLikes] = useState(post._count.likes);
+  const [showComments, setShowComments] = useState(false);
 
   const handleLike = async () => {
     if (isLiking) return;
-
     try {
-      setIsLiking(true)
-      setHasLiked(prev => !prev)
-      setOptimisticLikes(prev => prev + (hasLiked ? -1 : 1))
-      await toggleLike(post.id)
+      setIsLiking(true);
+      setHasLiked((prev) => !prev);
+      setOptmisticLikes((prev) => prev + (hasLiked ? -1 : 1));
+      await toggleLike(post.id);
     } catch (error) {
-      setOptimisticLikes(post._count.likes);
+      setOptmisticLikes(post._count.likes);
       setHasLiked(post.likes.some((like) => like.userId === dbUserId));
     } finally {
-      setIsLiking(false)
+      setIsLiking(false);
     }
-  }
+  };
 
   const handleAddComment = async () => {
     if (!newComment.trim() || isCommenting) return;
@@ -72,13 +72,14 @@ function PostCard({ post, dbUserId } : { post: Post; dbUserId: string | null }) 
       <Card className="overflow-hidden">
         <CardContent className="p-4 sm:p-6">
           <div className="space-y-4">
-            <div className="flex gap-3 sm:space-x-4">
+            <div className="flex space-x-3 sm:space-x-4">
               <Link href={`/profile/${post.author.username}`}>
                 <Avatar className="size-8 sm:w-10 sm:h-10">
                   <AvatarImage src={post.author.image ?? "/avatar.png"} />
                 </Avatar>
               </Link>
-            {/*  post header */}
+
+              {/* POST HEADER & TEXT CONTENT */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2 truncate">
@@ -94,7 +95,7 @@ function PostCard({ post, dbUserId } : { post: Post; dbUserId: string | null }) 
                       <span>{formatDistanceToNow(new Date(post.createdAt))} ago</span>
                     </div>
                   </div>
-                  {/* author of post ? */}
+                  {/* Check if current user is the post author */}
                   {dbUserId === post.author.id && (
                       <DeleteAlertDialog isDeleting={isDeleting} onDelete={handleDeletePost} />
                   )}
@@ -105,7 +106,6 @@ function PostCard({ post, dbUserId } : { post: Post; dbUserId: string | null }) 
           </div>
         </CardContent>
       </Card>
-  )
+  );
 }
-
 export default PostCard;
