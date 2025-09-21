@@ -2,7 +2,7 @@
 
 import {Post} from "@prisma/client";
 import {useState} from "react";
-import {getPosts} from "@/actions/post.action";
+import {getPosts, toggleLike} from "@/actions/post.action";
 
 type Posts = Awaited<ReturnType<typeof getPosts>>
 type Post = Posts[number]
