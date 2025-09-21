@@ -2,6 +2,7 @@
 //  use webhooks for production
 import {auth, currentUser} from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
+import {revalidatePath} from "next/cache";
 
 export async function syncUser() {
   try {
@@ -149,6 +150,7 @@ export async function toggleFollow(targetUserId:string) {
       ])
     }
 
+    revalidatePath("/");
     return { success: true }
   } catch (error) {
     console.error("Error in toggleFollow", error)
