@@ -47,7 +47,7 @@ function NotificationsPage() {
       }
     };
 
-    return fetchNotifications();
+    fetchNotifications();
   }, []);
 
   if (isLoading) return <NotificationsSkeleton />;
