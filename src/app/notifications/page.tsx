@@ -9,7 +9,7 @@ import { HeartIcon, MessageCircleIcon, UserPlusIcon } from "lucide-react";
 
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import {getNotifications, markNotificationsAsRead} from "@/actions/notifications.actions";
+import {getNotifications, markNotificationsAsRead} from "@/actions/notifications.action";
 
 type Notifications = Awaited<ReturnType<typeof getNotifications>>;
 type Notification = Notifications[number];
