@@ -13,10 +13,10 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { SignInButton, useUser } from "@clerk/nextjs";
-import { format } from "date-fns";
 import { CalendarIcon, EditIcon, FileTextIcon, HeartIcon, LinkIcon, MapPinIcon } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { format } from "date-fns";
 
 type User = Awaited<ReturnType<typeof getProfileByUsername>>
 type Posts = Awaited<ReturnType<typeof getUserPosts>>
@@ -72,6 +72,7 @@ function ProfilePageClient({ isFollowing: initialIsFollowing, likedPosts, posts,
       currentUser?.username === user.username ||
       currentUser?.emailAddresses[0].emailAddress.split("@")[0] === user.username;
 
+  const formattedDate = format(new Date(user.createdAt), "MMMM yyyy");
 
   return (
       <div className="max-w-3xl mx-auto">
@@ -87,7 +88,7 @@ function ProfilePageClient({ isFollowing: initialIsFollowing, likedPosts, posts,
                   <p className="text-muted-foreground">@{user.username}</p>
                   <p className="mt-2 text-sm">{user.bio}</p>
 
-                  {/* PROFILE STATS */}
+                  {/* stats */}
                   <div className="w-full mt-6">
                     <div className="flex justify-between mb-4">
                       <div>
@@ -107,7 +108,7 @@ function ProfilePageClient({ isFollowing: initialIsFollowing, likedPosts, posts,
                     </div>
                   </div>
 
-                  {/* "FOLLOW & EDIT PROFILE" BUTTONS */}
+                  {/* "edit profile" */}
                   {!currentUser ? (
                       <SignInButton mode="modal">
                         <Button className="w-full mt-4">Follow</Button>
@@ -128,7 +129,7 @@ function ProfilePageClient({ isFollowing: initialIsFollowing, likedPosts, posts,
                       </Button>
                   )}
 
-                  {/* LOCATION & WEBSITE */}
+                  {/* location, website */}
                   <div className="w-full mt-6 space-y-2 text-sm">
                     {user.location && (
                         <div className="flex items-center text-muted-foreground">
