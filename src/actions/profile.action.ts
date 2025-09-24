@@ -152,7 +152,7 @@ export async function getUserLikedPosts(userId: string) {
 export async function updateProfile(formData: FormData) {
   try {
     const { userId: clerkId } = await auth();
-    if (!clerkId) throw new Error("Unauthorized");
+    if (!clerkId) throw new Error("Unauthorised");
 
     const name = formData.get("name") as string;
     const bio = formData.get("bio") as string;
