@@ -11,6 +11,7 @@ export default async function Home(){
   const dbUserId = await getDbUserId();
 
   console.log({posts})
+  console.log("DB URL:", process.env.DATABASE_URL);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-10 gap-6">

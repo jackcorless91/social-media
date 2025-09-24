@@ -1,14 +1,9 @@
-import {
-  getProfileByUsername,
-  getUserLikedPosts,
-  getUserPosts,
-  isFollowing,
-} from "@/actions/profile.action";
-import { notFound } from "next/navigation";
-import ProfilePageClient from "./ProfilePageClient";
+import {getProfileByUsername, getUserLikedPosts, getUserPosts, isFollowing} from "@/actions/profile.action";
+import {notFound} from "next/navigation";
+import profilePageClient from "@/app/profile/[username]/ProfilePageClient";
 
-export async function generateMetadata({ params }: { params: { username: string } }) {
-  const user = await getProfileByUsername(params.username);
+export async function generateMetaData({ params }: {params: { username: string } }) {
+  const user = await getProfileByUsername(params.username)
   if (!user) return;
 
   return {
@@ -17,24 +12,25 @@ export async function generateMetadata({ params }: { params: { username: string 
   };
 }
 
-async function ProfilePageServer({ params }: { params: { username: string } }) {
-  const user = await getProfileByUsername(params.username);
+async function ProfilePage({ params }: {params: { username: string } }) {
+  const user = await getProfileByUsername(params.username)
 
   if (!user) notFound();
 
   const [posts, likedPosts, isCurrentUserFollowing] = await Promise.all([
-    getUserPosts(user.id),
-    getUserLikedPosts(user.id),
-    isFollowing(user.id),
-  ]);
+      getUserPosts(user.id),
+      getUserLikedPosts(user.id),
+      isFollowing(user.id),
+  ])
 
+  await new Promise((resolve) => setTimeout(resolve, 3000))
   return (
       <ProfilePageClient
-          user={user}
-          posts={posts}
-          likedPosts={likedPosts}
-          isFollowing={isCurrentUserFollowing}
+        user={user}
+        posts={posts}
+        likedPosts={likedPosts}
+        isFollowing={isCurrentUserFollowing}
       />
   );
 }
-export default ProfilePageServer;
+export default ProfilePage;
