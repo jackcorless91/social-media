@@ -1,8 +1,14 @@
-import { getProfileByUsername, getUserLikedPosts, getUserPosts, isFollowing, } from "@/actions/profile.action";
+import {
+  getProfileByUsername,
+  getUserLikedPosts,
+  getUserPosts,
+  isFollowing,
+} from "@/actions/profile.action";
 import { notFound } from "next/navigation";
 import ProfilePageClient from "./ProfilePageClient";
 
-export async function generateMetadata({ params }: { params: { username: string } }) {
+// ✅ Correct type for generateMetadata
+export async function generateMetadata({ params, }: { params: { username: string }; }) {
   const user = await getProfileByUsername(params.username);
   if (!user) return;
 
@@ -12,7 +18,13 @@ export async function generateMetadata({ params }: { params: { username: string 
   };
 }
 
-async function ProfilePageServer({ params }: { params: { username: string } }) {
+interface ProfilePageProps {
+  params: {
+    username: string;
+  };
+}
+
+async function ProfilePageServer({ params }: ProfilePageProps) {
   const user = await getProfileByUsername(params.username);
 
   if (!user) notFound();
@@ -32,4 +44,5 @@ async function ProfilePageServer({ params }: { params: { username: string } }) {
       />
   );
 }
+
 export default ProfilePageServer;
