@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { ClerkProvider } from '@clerk/nextjs';
 import localFont from "next/font/local";
 import "./globals.css";
+import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar"
-import {Toaster} from "react-hot-toast";
+import Sidebar from "@/components/Sidebar";
+import { Toaster } from "react-hot-toast";
+import React from "react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -19,46 +20,42 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "social-media",
-  description: "social media web app built with next.js",
+  title: "Socially",
+  description: "A social media application powered by Next.js",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
+export default function RootLayout({ children, }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
       <ClerkProvider>
         <html lang="en" suppressHydrationWarning>
-          <body className={`${geistSans.variable} ${geistMono.variable} initialised`}>
-          <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-          >
-            <div className="min-h-screen">
-              <Navbar />
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+        >
+          <div className="min-h-screen">
+            <Navbar />
 
-              <main className="py-8">
-                <div className="max-w-7xl mx-auto px-4">
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                    <div className="midden lg:block lg:col-span-3">
-                      <Sidebar />
-                    </div>
-                    <div className="lg:col-span-9">
-                      {children}
-                    </div>
+            <main className="py-8">
+
+              <div className="max-w-7xl mx-auto px-4">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                  <div className="hidden lg:block lg:col-span-3">
+                    <Sidebar />
                   </div>
+                  <div className="lg:col-span-9">{children}</div>
                 </div>
-              </main>
-            </div>
-            <Toaster />
-          </ThemeProvider>
-          </body>
+              </div>
+            </main>
+          </div>
+          <Toaster />
+        </ThemeProvider>
+        </body>
         </html>
       </ClerkProvider>
   );
 }
-
