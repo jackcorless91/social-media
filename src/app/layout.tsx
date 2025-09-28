@@ -20,13 +20,11 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Socially",
+  title: "social-media",
   description: "A social media application powered by Next.js",
 };
 
-export default function RootLayout({ children, }: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode }>) {
   return (
       <ClerkProvider>
         <html lang="en" suppressHydrationWarning>
